@@ -5,7 +5,6 @@ import android.support.annotation.IntDef;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +42,9 @@ public class TaskLayout extends ConstraintLayout {
         params.rightToRight = getId();
         params.bottomToBottom = getId();
         params.bottomMargin = dp2px(37);
+        //修改这里处理图标或文件被截取的问题
+        params.leftMargin = dp2px(10);
+        params.rightMargin = dp2px(10);
     }
 
     public void setMax(int max) {
@@ -78,18 +80,25 @@ public class TaskLayout extends ConstraintLayout {
     private SparseIntArray states = new SparseIntArray();
 
     public void addStage(final int stage, int money, boolean isReceive) {
+        //保存状态
         states.put(stage, isReceive ? RECEIVED : NORMAL);
 
         float per = stage * 1.0f / mProgressBar.getMax();
 
         Space space = new Space(getContext());
-        space.setId(stage);
+        space.setId(View.generateViewId());
         addView(space);
         baseLine.append(stage, space);
         LayoutParams params = (LayoutParams) space.getLayoutParams();
-        params.leftToLeft = getId();
-        params.rightToRight = getId();
-        params.horizontalBias = per;
+        if (per == 0) {
+            params.leftToLeft = mProgressBar.getId();
+            params.rightToLeft = mProgressBar.getId();
+            params.horizontalBias = 0;
+        } else {
+            params.leftToLeft = mProgressBar.getId();
+            params.rightToRight = mProgressBar.getId();
+            params.horizontalBias = per;
+        }
         space.setLayoutParams(params);
 
         //初始化icon

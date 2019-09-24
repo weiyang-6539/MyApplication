@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         mTaskLayout.setProgress(3);
         mTaskLayout.setMax(24);
 
+        mTaskLayout.addStage(0, 1, false);
         mTaskLayout.addStage(3, 88, false);
         mTaskLayout.addStage(6, 188, false);
         mTaskLayout.addStage(9, 388, false);
@@ -60,5 +61,6 @@ public class MainActivity extends AppCompatActivity {
         mTaskLayout.addStage(15, 588, false);
         mTaskLayout.addStage(18, 588, false);
         mTaskLayout.addStage(21, 588, false);
+        mTaskLayout.addStage(24, 888, false);
     }
 }
