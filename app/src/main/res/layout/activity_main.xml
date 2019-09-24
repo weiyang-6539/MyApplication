@@ -6,7 +6,6 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
     <com.wyang.mylibrary.TaskLayout
             android:layout_gravity="center"
             android:id="@+id/mTaskLayout"
