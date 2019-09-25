@@ -81,7 +81,12 @@ public class TaskLayout extends ConstraintLayout {
 
     public void addStage(final int stage, int money, boolean isReceive) {
         //保存状态
-        states.put(stage, isReceive ? RECEIVED : NORMAL);
+        if (isReceive)
+            states.put(stage, RECEIVED);
+        else if (stage < mProgressBar.getProgress())
+            states.put(stage, ACTIVE);
+        else
+            states.put(stage, NORMAL);
 
         float per = stage * 1.0f / mProgressBar.getMax();
 
@@ -191,6 +196,20 @@ public class TaskLayout extends ConstraintLayout {
         states.put(stage, RECEIVED);
         if (onStageListener != null)
             onStageListener.setIcon(iconArr.get(stage), RECEIVED);
+    }
+
+    //获取当前阶段 前可领取阶段的key
+    public int getPrevious(int stage) {
+        for (int i = 0; i < states.size(); i++) {
+            int keyAt = states.keyAt(i);
+            if (keyAt >= stage)
+                return -1;
+
+            int state = states.valueAt(i);
+            if (state == ACTIVE)
+                return keyAt;
+        }
+        return -1;
     }
 
     private int dp2px(float dp) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(final int stage) {
+                int previous = mTaskLayout.getPrevious(stage);
+                if (previous != -1) {
+                    Toast.makeText(MainActivity.this, "请先领取阶段-" + previous, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //调用接口领取
                 Toast.makeText(MainActivity.this, "领取中..", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
@@ -44,14 +50,13 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(MainActivity.this, "领取成功!", Toast.LENGTH_SHORT).show();
                         mTaskLayout.setReceived(stage);
-                        mTaskLayout.setProgress(stage + 3);
                     }
                 }, 3000);
             }
         });
 
-        mTaskLayout.setProgress(3);
-        mTaskLayout.setMax(24);
+        mTaskLayout.setProgress(progress);
+        mTaskLayout.setMax(max);
 
         mTaskLayout.addStage(0, 1, false);
         mTaskLayout.addStage(3, 88, false);
@@ -62,5 +67,15 @@ public class MainActivity extends AppCompatActivity {
         mTaskLayout.addStage(18, 588, false);
         mTaskLayout.addStage(21, 588, false);
         mTaskLayout.addStage(24, 888, false);
+    }
+
+    private int progress;
+    private int max = 24;
+
+    public void add(View v) {
+        if (progress == max)
+            return;
+
+        mTaskLayout.setProgress(++progress);
     }
 }
